@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =3
+let g:netrw_dirhist_3='/home/patrick/Projects/jhannah/packages/shopify/src/vue/components/collection-thumbnails'
+let g:netrw_dirhist_2='/home/patrick/Projects/jhannah/packages/shopify/src/vue/components'
+let g:netrw_dirhist_1='/home/patrick/Projects/jhannah/packages/shopify/src/vue'

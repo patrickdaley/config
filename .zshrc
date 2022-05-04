@@ -72,7 +72,6 @@ ZSH_THEME=""
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
 	git
-	zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -81,7 +80,7 @@ fpath+=$HOME/.zsh/pure
 autoload -U promptinit; promptinit
 
 PURE_PROMPT_SYMBOL=→
-PURE_PROMPT_VICMD_SYMBOL=🅥
+PURE_PROMPT_VICMD_SYMBOL=♦
 
 prompt pure
 
@@ -121,5 +120,6 @@ alias vim="nvim"
 
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 alias config='/usr/bin/git --git-dir=/home/patrick/.cfg/ --work-tree=/home/patrick'
 

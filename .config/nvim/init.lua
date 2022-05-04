@@ -21,35 +21,51 @@ require('packer').startup(function(use)
   -- UI to select things (files, grep results, open buffers...)
   use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-  use 'sainnhe/gruvbox-material' -- Theme inspired by Atom
+  -- use 'sainnhe/gruvbox-material' -- Theme inspired by Atom
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
   -- Add indentation guides even on blank lines
-  use 'lukas-reineke/indent-blankline.nvim'
+  -- use 'lukas-reineke/indent-blankline.nvim'
   -- Add git related info in the signs columns and popups
-  use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
+  -- use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   -- Highlight, edit, and navigate code using a fast incremental parsing library
   use 'nvim-treesitter/nvim-treesitter'
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
+  use 'jose-elias-alvarez/null-ls.nvim'
+  use 'jose-elias-alvarez/nvim-lsp-ts-utils'
   use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
   use 'hrsh7th/cmp-nvim-lsp'
   use 'saadparwaiz1/cmp_luasnip'
   use 'L3MON4D3/LuaSnip' -- Snippets plugin
+  -- use 'norcalli/nvim-colorizer.lua'
+  use {
+      'prettier/vim-prettier', 
+      run = 'npm install --frozen-lockfile --production',
+      ft = {'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'}
+  }
 end)
 
 --Set highlight on search
 vim.o.hlsearch = false
 
 --Make line numbers default
-vim.wo.number = true
-vim.wo.relativenumber = true
+
+vim.wo.number = false
+vim.wo.numberwidth = 6
+vim.wo.relativenumber = false
 
 --Enable mouse mode
 vim.o.mouse = 'a'
 
 --Enable break indent
 vim.o.breakindent = true
+
+--Tab With
+vim.o.tabstop = 2
+
+--Hide fill tilde
+vim.wo.fillchars='eob: '
 
 --Save undo history
 vim.opt.undofile = true
@@ -63,25 +79,44 @@ vim.o.updatetime = 250
 vim.wo.signcolumn = 'yes'
 
 --Set colorscheme
-vim.o.termguicolors = true
+--Use terminal's scheme
+vim.o.termguicolors = false
 vim.cmd [[
-  let g:gruvbox_material_background = 'hard'
-  let g:gruvbox_material_better_performance = 1
-  colorscheme gruvbox-material
+  highlight clear SignColumn
+  highlight EndOfBuffer ctermfg=0 guifg=0
 ]]
 
+--Colorizer
+-- require('colorizer').setup()
+--Setting it again to get around the colorizer error
+-- vim.o.termguicolors = false
+
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
+-- vim.o.completeopt = 'menuone,noselect'
 
 --Set statusbar
 require('lualine').setup {
   options = {
-    icons_enabled = true,
-    theme = 'gruvbox-material',
-    component_separators = '|',
+    icons_enabled = false,
+    component_separators = '',
     section_separators = '',
   },
+  sections = {
+    lualine_a = {
+      { 'mode', separator = { left = "\u{E0B6}", right = "\u{E0B4}" } }, 
+    },
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  }
 }
+
+vim.cmd [[
+  set nosmd
+  set noru
+]]
 
 --Enable Comment.nvim
 require('Comment').setup()
@@ -103,13 +138,23 @@ vim.cmd [[
   augroup end
 ]]
 
+
 --Map blankline
-vim.g.indent_blankline_char = '┊'
-vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
-vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
-vim.g.indent_blankline_show_trailing_blankline_indent = false
+--[[
+require("indent_blankline").setup {
+  char = '',
+  filetype_exclude = { 'help', 'packer' },
+  buftype_exclude = { 'terminal', 'nofile' },
+  show_trailing_blankline_indent = false
+}
+
+vim.cmd [[
+  highlight IndentBlanklineContextChar guifg=#ffffff gui=nocombine
+]]
+--]]
 
 -- Gitsigns
+--[[
 require('gitsigns').setup {
   signs = {
     add = { text = '+' },
@@ -119,10 +164,12 @@ require('gitsigns').setup {
     changedelete = { text = '~' },
   },
 }
+--]]
 
 -- Telescope
 require('telescope').setup {
   defaults = {
+    file_ignore_patterns = { "node_modules" },
     mappings = {
       i = {
         ['<C-u>'] = false,
@@ -207,6 +254,36 @@ vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<
 
 -- LSP settings
 local lspconfig = require 'lspconfig'
+
+-- local buf_map = function(bufnr, mode, lhs, rhs, opts)
+--     vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts or {
+--         silent = true,
+--     })
+-- end
+-- lspconfig.tsserver.setup({
+--     on_attach = function(client, bufnr)
+--         client.resolved_capabilities.document_formatting = false
+--         client.resolved_capabilities.document_range_formatting = false
+--         local ts_utils = require("nvim-lsp-ts-utils")
+--         ts_utils.setup({})
+--         ts_utils.setup_client(client)
+--         buf_map(bufnr, "n", "gs", ":TSLspOrganize<CR>")
+--         buf_map(bufnr, "n", "gi", ":TSLspRenameFile<CR>")
+--         buf_map(bufnr, "n", "go", ":TSLspImportAll<CR>")
+--         on_attach(client, bufnr)
+--     end,
+-- })
+--
+-- local null_ls = require("null-ls")
+-- null_ls.setup({
+--     sources = {
+--         null_ls.builtins.diagnostics.eslint,
+--         null_ls.builtins.code_actions.eslint,
+--         null_ls.builtins.formatting.prettier
+--     },
+--     on_attach = on_attach
+-- })
+
 local on_attach = function(_, bufnr)
   local opts = { noremap = true, silent = true }
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -222,6 +299,17 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
+
+  -- buf_map(bufnr, "n", "gd", ":LspDef<CR>")
+  -- buf_map(bufnr, "n", "gr", ":LspRename<CR>")
+  -- buf_map(bufnr, "n", "gy", ":LspTypeDef<CR>")
+  -- buf_map(bufnr, "n", "K", ":LspHover<CR>")
+  -- buf_map(bufnr, "n", "[a", ":LspDiagPrev<CR>")
+  -- buf_map(bufnr, "n", "]a", ":LspDiagNext<CR>")
+  -- buf_map(bufnr, "n", "ga", ":LspCodeAction<CR>")
+  -- buf_map(bufnr, "n", "<Leader>a", ":LspDiagLine<CR>")
+  -- buf_map(bufnr, "i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>")
+
   vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 end
 
@@ -229,15 +317,37 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
+-- vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=blue]]
+-- vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=red guibg=white]]
+
+local border = {
+      {"🭽", "FloatBorder"},
+      {"▔", "FloatBorder"},
+      {"🭾", "FloatBorder"},
+      {"▕", "FloatBorder"},
+      {"🭿", "FloatBorder"},
+      {"▁", "FloatBorder"},
+      {"🭼", "FloatBorder"},
+      {"▏", "FloatBorder"},
+}
+
+-- LSP settings (for overriding per client)
+-- local handlers =  {
+--   ["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = border}),
+--   ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border }),
+-- }
+
 -- Enable the following language servers
 local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
+    -- handlers = handlers,
     on_attach = on_attach,
     capabilities = capabilities,
   }
 end
 
+--[[
 -- Example custom server
 -- Make runtime files discoverable to the server
 local runtime_path = vim.split(package.path, ';')
@@ -270,6 +380,7 @@ lspconfig.sumneko_lua.setup {
     },
   },
 }
+]]--
 
 -- luasnip setup
 local luasnip = require 'luasnip'
@@ -318,3 +429,4 @@ cmp.setup {
   },
 }
 -- vim: ts=2 sts=2 sw=2 et
+

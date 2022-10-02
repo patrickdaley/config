@@ -76,19 +76,35 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-fpath+=$HOME/.zsh/pure
-autoload -U promptinit; promptinit
-
-PURE_PROMPT_SYMBOL=→
-PURE_PROMPT_VICMD_SYMBOL=♦
-
-prompt pure
-
 # Enable vi mode
 bindkey -v
 
 # 10ms for key sequences (normal mode delay)
 KEYTIMEOUT=1
+
+fpath+=$HOME/.zsh/pure
+autoload -U promptinit; promptinit
+
+PURE_PROMPT_SYMBOL=→
+PURE_PROMPT_VICMD_SYMBOL=·
+
+prompt pure
+
+# ZLE hooks for prompt's vi mode status
+# function zle-line-init zle-keymap-select {
+# 	# Change the cursor style depending on keymap mode.
+# 	case $KEYMAP {
+# 		vicmd)
+# 			printf '\e[0 q' # Box.
+# 			;;
+#
+# 		viins|main)
+# 			printf '\e[6 q' # Vertical bar.
+# 			;;
+# 	}
+# }
+# zle -N zle-line-init
+# zle -N zle-keymap-select
 
 # User configuration
 
@@ -121,5 +137,13 @@ alias vim="nvim"
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="/usr/local/bin/DataGrip-2022.1.5/bin:$PATH"
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
 alias config='/usr/bin/git --git-dir=/home/patrick/.cfg/ --work-tree=/home/patrick'
+
+. $HOME/.asdf/asdf.sh
 

@@ -51,9 +51,9 @@ vim.o.hlsearch = false
 
 --Make line numbers default
 
-vim.wo.number = false
-vim.wo.numberwidth = 6
-vim.wo.relativenumber = false
+vim.wo.number = true
+--vim.wo.numberwidth = 32
+vim.wo.relativenumber = true
 
 --Enable mouse mode
 vim.o.mouse = 'a'
@@ -63,6 +63,7 @@ vim.o.breakindent = true
 
 --Tab With
 vim.o.tabstop = 2
+vim.o.shiftwidth = 2
 
 --Hide fill tilde
 vim.wo.fillchars='eob: '
@@ -82,8 +83,10 @@ vim.wo.signcolumn = 'yes'
 --Use terminal's scheme
 vim.o.termguicolors = false
 vim.cmd [[
+  set signcolumn=yes
   highlight clear SignColumn
   highlight EndOfBuffer ctermfg=0 guifg=0
+  highlight LineNr ctermfg=236
 ]]
 
 --Colorizer
@@ -109,7 +112,9 @@ require('lualine').setup {
     lualine_c = {},
     lualine_x = {},
     lualine_y = {'progress'},
-    lualine_z = {'location'}
+    lualine_z = {
+      { 'location', separator = { left = "\u{E0B6}", right = "\u{E0B4}" } }, 
+    }
   }
 }
 
@@ -196,8 +201,17 @@ vim.api.nvim_set_keymap('n', '<leader>?', [[<cmd>lua require('telescope.builtin'
 -- Treesitter configuration
 -- Parsers must be installed manually via :TSInstall
 require('nvim-treesitter.configs').setup {
+  autotag = {
+    enable = true,
+  },
+  context_commentstring = {
+    enable = true,
+    enable_autocmd = false,
+  },
+
   highlight = {
     enable = true, -- false will disable the whole extension
+    use_languagetree = true,
   },
   incremental_selection = {
     enable = true,
@@ -244,6 +258,26 @@ require('nvim-treesitter.configs').setup {
       },
     },
   },
+  ensure_installed = {
+    'query',
+    'javascript',
+    'jsdoc',
+    'typescript',
+    'tsx',
+    'json',
+    'python',
+    'html',
+    'graphql',
+    'lua',
+    'vue',
+    'yaml',
+    'css',
+    'bash',
+    'scss',
+    'vim',
+    'markdown',
+    'svelte',
+  },
 }
 
 -- Diagnostic keymaps
@@ -254,35 +288,6 @@ vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<
 
 -- LSP settings
 local lspconfig = require 'lspconfig'
-
--- local buf_map = function(bufnr, mode, lhs, rhs, opts)
---     vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts or {
---         silent = true,
---     })
--- end
--- lspconfig.tsserver.setup({
---     on_attach = function(client, bufnr)
---         client.resolved_capabilities.document_formatting = false
---         client.resolved_capabilities.document_range_formatting = false
---         local ts_utils = require("nvim-lsp-ts-utils")
---         ts_utils.setup({})
---         ts_utils.setup_client(client)
---         buf_map(bufnr, "n", "gs", ":TSLspOrganize<CR>")
---         buf_map(bufnr, "n", "gi", ":TSLspRenameFile<CR>")
---         buf_map(bufnr, "n", "go", ":TSLspImportAll<CR>")
---         on_attach(client, bufnr)
---     end,
--- })
---
--- local null_ls = require("null-ls")
--- null_ls.setup({
---     sources = {
---         null_ls.builtins.diagnostics.eslint,
---         null_ls.builtins.code_actions.eslint,
---         null_ls.builtins.formatting.prettier
---     },
---     on_attach = on_attach
--- })
 
 local on_attach = function(_, bufnr)
   local opts = { noremap = true, silent = true }
@@ -300,16 +305,6 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
 
-  -- buf_map(bufnr, "n", "gd", ":LspDef<CR>")
-  -- buf_map(bufnr, "n", "gr", ":LspRename<CR>")
-  -- buf_map(bufnr, "n", "gy", ":LspTypeDef<CR>")
-  -- buf_map(bufnr, "n", "K", ":LspHover<CR>")
-  -- buf_map(bufnr, "n", "[a", ":LspDiagPrev<CR>")
-  -- buf_map(bufnr, "n", "]a", ":LspDiagNext<CR>")
-  -- buf_map(bufnr, "n", "ga", ":LspCodeAction<CR>")
-  -- buf_map(bufnr, "n", "<Leader>a", ":LspDiagLine<CR>")
-  -- buf_map(bufnr, "i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>")
-
   vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 end
 
@@ -317,36 +312,14 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
--- vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=blue]]
--- vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=red guibg=white]]
-
-local border = {
-      {"🭽", "FloatBorder"},
-      {"▔", "FloatBorder"},
-      {"🭾", "FloatBorder"},
-      {"▕", "FloatBorder"},
-      {"🭿", "FloatBorder"},
-      {"▁", "FloatBorder"},
-      {"🭼", "FloatBorder"},
-      {"▏", "FloatBorder"},
-}
-
--- LSP settings (for overriding per client)
--- local handlers =  {
---   ["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = border}),
---   ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border }),
--- }
-
 -- Enable the following language servers
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+local servers = { 'clangd', 'cssls', 'rust_analyzer', 'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
-    -- handlers = handlers,
     on_attach = on_attach,
     capabilities = capabilities,
   }
 end
-
 --[[
 -- Example custom server
 -- Make runtime files discoverable to the server

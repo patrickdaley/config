@@ -112,12 +112,13 @@ prompt pure
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
- if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
- else
-   export EDITOR='vim'
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='vim'
 fi
 
 # Compilation flags
@@ -131,19 +132,28 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-#
+
 alias vim="nvim"
 
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="/usr/local/bin/DataGrip-2022.1.5/bin:$PATH"
+setopt cdablevars
+vimconf=$HOME/.config/nvim/lua/
 
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+export PATH="$HOME/.local/bin:$PATH"
+
+# export VOLTA_HOME="$HOME/.volta"
+# export PATH="$VOLTA_HOME/bin:$PATH"
+
+# export PATH="/usr/local/bin/DataGrip-2022.1.5/bin:$PATH"
+
+# export PYENV_ROOT="$HOME/.pyenv"
+# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
 
 alias config='/usr/bin/git --git-dir=/home/patrick/.cfg/ --work-tree=/home/patrick'
 
-. $HOME/.asdf/asdf.sh
+# fnm
+export PATH=/home/patrick/.fnm:$PATH
+eval "`fnm env`"
+
+. "$HOME/.cargo/env"
 

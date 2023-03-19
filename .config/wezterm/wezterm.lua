@@ -1,145 +1,124 @@
-local wezterm = require 'wezterm'
-local font_family = "IBM Plex Mono Text"
+local wezterm = require("wezterm")
 
-colors = {
-	background = "#141414",
-	foreground = "#ffffdf",
-}
+-- local font_family = "IBM Plex Mono"
+-- local font_family = "Liberation Mono"
+-- local font_family = "SF Mono"
+-- local font_family = "SF Mono"
+-- local font_family = "Iosevka SS08"
+local scheme = wezterm.color.get_builtin_schemes()["Twilight"]
 
-function basename(s)
-	return string.gsub(s, "(.*[/\\])(.*)", "%2")
-end
+-- local function basename(s)
+-- 	return string.gsub(s, "(.*[/\\])(.*)", "%2")
+-- end
 
-function without_context(s)
+local function without_context(s)
 	return string.gsub(s, "(.+%:%s)", "")
 end
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 	local pane = tab.active_pane
-	local title = "  " .. without_context(pane.title) .. "  "
+	local title = " " .. without_context(pane.title) .. "  \n"
 	-- local title = "  " .. basename(pane.foreground_process_name) .. "  "
 
-  local is_italic = true
-
-  if tab.is_active then
-    is_italic = true
-  end
-
 	return {
-    {Attribute={Intensity="Normal"}},
-    -- {Attribute={Italic=is_italic}},
-		{Text=title},
+		{ Attribute = { Intensity = "Normal" } },
+		-- {Attribute={Italic=is_italic}},
+		{ Text = title },
 	}
 end)
 
 return {
-	color_scheme = "Darcula Mono",
+	color_scheme = "Twilight",
 
+	line_height = 1.2,
 	font_size = 12,
+	-- cell_width = 0.9,
+	bold_brightens_ansi_colors = false,
 	tab_bar_at_bottom = true,
 	tab_max_width = 48,
 	use_fancy_tab_bar = false,
 	hide_tab_bar_if_only_one_tab = true,
+	use_resize_increments = true,
 	window_decorations = "RESIZE",
-	enable_wayland = false,
+
+	-- font = wezterm.font_with_fallback({
+	-- 	{ family = "SF Mono", weight = "Medium", scale = 1 },
+	-- }),
+	font = wezterm.font_with_fallback({
+		{ family = "SF Mono", weight = "Medium", scale = 1.04 },
+	}),
 
 	font_rules = {
 		{
-			italic = true,
-			font = wezterm.font(font_family, {italic=true})
-		},
-		{
-			font = wezterm.font(font_family, {italic=false})
-		},
-		{
 			intensity = "Bold",
-			font = wezterm.font(font_family, {intensity="Normal"})
+			font = wezterm.font_with_fallback({
+				{ family = "SF Mono", weight = "Medium", scale = 1.04 },
+			}),
 		},
 	},
 
+	-- freetype_load_target = "Light",
+	-- freetype_render_target = "HorizontalLcd",
+	--
+	-- font_rules = {
+	-- 	{
+	-- 		italic = true,
+	-- 		font = wezterm.font(font_family, { italic = true }),
+	-- 	},
+	-- 	{
+	-- 		intensity = "Normal",
+	-- 		font = wezterm.font(font_family, { italic = false }),
+	-- 	},
+	-- 	{
+	-- 		intensity = "Bold",
+	-- 		font = wezterm.font(font_family, { intensity = "Normal" }),
+	-- 	},
+	-- },
+
 	colors = {
-		foreground = "#ffffdf",
-		-- background = colors.background,
-		background = "#121212",
-
-		ansi = {
-			colors.background,
-			"#c06c43",
-			"#afb979",
-			"#c2a86c",
-			"#626262",
-			"#b4be7b",
-			"#778284",
-			"#feffd3"
-		},
-		brights = {
-			"#262626",
-			"#dd7c4c",
-			"#cbd88c",
-			"#e1c47d", --yello
-			"#5a5d61", 
-			-- "#D4CD81", --green
-			-- "#b1ce80", --green
-			-- "#94E09B", --green
-			"#c4d188", --green
-			-- "#d0db8e", --green
-			-- "#8a989a", --cyan
-			-- "#BEC4B4",
-			"#81857A",
-			"#feffd3"  
-		},
-
 		indexed = {
-			[81]	= "#EBBE78",
-			-- [121] = "#AABFB1", --teal
-			-- [121] = "8FB8B3", --teal
-			[121] = "#A18D5A", --teal
-			[224] = "#707862", --red
-			-- [224] = "#718076", --red
-			[225] = "#AABFB1", --magenta
+			[121] = scheme.ansi[8],
+			[81] = scheme.ansi[2],
+			[224] = scheme.brights[5],
+			-- [225] = "red"
 		},
 
 		tab_bar = {
-			background = colors.background,
+			background = scheme.background,
 
 			active_tab = {
-				-- The color of the text for the tab
-				fg_color = "#c0c0c0",
+				fg_color = scheme.foreground,
+				bg_color = scheme.background,
 				underline = "None",
 				strikethrough = false,
-				bg_color = colors.background
 			},
 
 			inactive_tab = {
-				bg_color = colors.background,
-				-- fg_color = "#808080",
-				fg_color = "#303030",
+				bg_color = scheme.background,
+				fg_color = scheme.ansi[5],
 			},
 
 			new_tab = {
-				bg_color = colors.background,
-				fg_color = "#808080",
+				bg_color = scheme.background,
+				fg_color = scheme.brights[5],
 			},
-		}
+		},
 	},
-
 
 	keys = {
-		{key="i", mods="CTRL", action="DisableDefaultAssignment"},
-		{key="{", mods="SHIFT|ALT", action=wezterm.action{MoveTabRelative=-1}},
-		{key="}", mods="SHIFT|ALT", action=wezterm.action{MoveTabRelative=1}},
-	},
-
-	window_frame = {
-		active_titlebar_bg = colors.background,
-		inactive_titlebar_bg = colors.background,
+		{ key = "i", mods = "CTRL", action = "DisableDefaultAssignment" },
+		{ key = "{", mods = "SHIFT|ALT", action = wezterm.action({ MoveTabRelative = -1 }) },
+		{ key = "}", mods = "SHIFT|ALT", action = wezterm.action({ MoveTabRelative = 1 }) },
 	},
 
 	window_padding = {
-		left = "2cell",
-		right = "2cell",
-		top = "1.5cell",
-		bottom = "1.5cell",
-	}
+		-- top = 0,
+		-- right = 0,
+		-- left = 0,
+		-- bottom = 0,
+		top = ".5cell",
+		right = "1cell",
+		bottom = ".5cell",
+		left = "1cell",
+	},
 }
-

@@ -1,15 +1,13 @@
 return {
-  -- add gruvbox
-  { "Yazeed1s/minimal.nvim" },
-  { "nyoom-engineering/oxocarbon.nvim" },
-  -- { "adisen99/apprentice.nvim" },
-  -- { "Mofiqul/adwaita.nvim" },
-  -- { "Yazeed1s/minimal.nvim" },
-  { "kvrohit/rasmus.nvim" },
+  { "rktjmp/lush.nvim" },
+  { "Mofiqul/adwaita.nvim" },
+  { "adisen99/apprentice.nvim" },
   { "lourenci/github-colors" },
   { "kvrohit/mellow.nvim" },
+  { "Yazeed1s/minimal.nvim" },
+  { "nyoom-engineering/oxocarbon.nvim" },
+  { "kvrohit/rasmus.nvim" },
   { "sainnhe/sonokai" },
-  { "rktjmp/lush.nvim" },
   {
     "ramojus/mellifluous.nvim",
     dependecies = {

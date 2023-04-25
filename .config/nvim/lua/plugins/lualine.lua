@@ -22,7 +22,7 @@ return {
         {
           "diagnostics",
         },
-        { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
+        { "filename", path = 0, symbols = { modified = "  ", readonly = "", unnamed = "" } },
       },
       lualine_x = {
         -- { "progress", separator = " ", padding = { left = 1, right = 1 } },

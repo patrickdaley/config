@@ -133,27 +133,13 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias vim="nvim"
-
 setopt cdablevars
 vimconf=$HOME/.config/nvim/lua/
 
-export PATH="$HOME/.local/bin:$PATH"
+alias vim="nvim"
+alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
-# export VOLTA_HOME="$HOME/.volta"
-# export PATH="$VOLTA_HOME/bin:$PATH"
-
-# export PATH="/usr/local/bin/DataGrip-2022.1.5/bin:$PATH"
-
-# export PYENV_ROOT="$HOME/.pyenv"
-# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
-
-alias config='/usr/bin/git --git-dir=/home/patrick/.cfg/ --work-tree=/home/patrick'
-
-# fnm
-export PATH=/home/patrick/.fnm:$PATH
-eval "`fnm env`"
-
-. "$HOME/.cargo/env"
+if [ -f ~/.zsh/work ]; then
+  source ~/.zsh/work
+fi
 

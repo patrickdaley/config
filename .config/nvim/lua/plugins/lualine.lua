@@ -17,30 +17,29 @@ return {
     },
     sections = {
       lualine_a = { "mode" },
-      lualine_b = { "branch" },
-      lualine_c = {
+      -- lualine_b = { "branch" },
+      lualine_b = {
+        { "filename", path = 0, symbols = { modified = "  ", readonly = "", unnamed = "" } },
         {
           "diagnostics",
         },
-        { "filename", path = 0, symbols = { modified = "  ", readonly = "", unnamed = "" } },
       },
       lualine_x = {
-        -- { "progress", separator = " ", padding = { left = 1, right = 1 } },
         { require("lazy.status").updates, cond = require("lazy.status").has_updates, color = fg("Special") },
-        {
-          "diff",
-          symbols = {
-            added = icons.git.added,
-            modified = icons.git.modified,
-            removed = icons.git.removed,
-          },
-        },
+        -- {
+        --   "diff",
+        --   symbols = {
+        --     added = icons.git.added,
+        --     modified = icons.git.modified,
+        --     removed = icons.git.removed,
+        --   },
+        -- },
       },
       lualine_y = {
-        { "progress", separator = "u'uE0B4'", padding = { left = 1, right = 1 } },
+        { "location", padding = { left = 1, right = 1 } },
       },
       lualine_z = {
-        { "location", padding = { left = 0, right = 1 } },
+        { "progress", separator = "u'uE0B4'", padding = { left = 1, right = 1 } },
       },
     },
   },

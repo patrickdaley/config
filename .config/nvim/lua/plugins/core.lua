@@ -5,15 +5,20 @@ return {
       -- icons used by other plugins
       icons = {
         diagnostics = {
-          Error = " ",
-          Warn = " ",
-          Hint = "",
+          -- Error = "󱈸",
+          -- Warn = "",
+          Error = "󱈸",
+          Warn = "󱈸",
+          Hint = "󱠃",
           Info = "ℹ",
         },
         git = {
-          added = " ",
-          modified = " ",
-          removed = " ",
+          -- added = " ",
+          added = "󱇬 ",
+          -- modified = " ",
+          modified = "󰲶 ",
+          -- removed = " ",
+          removed = "󱘹 ",
         },
         kinds = {
           Array = " ",

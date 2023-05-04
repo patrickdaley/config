@@ -1,13 +1,17 @@
 return {
   { "rktjmp/lush.nvim" },
   { "Mofiqul/adwaita.nvim" },
+  { "kyazdani42/blue-moon" },
   { "adisen99/apprentice.nvim" },
   { "lourenci/github-colors" },
+  { "savq/melange-nvim" },
   { "kvrohit/mellow.nvim" },
   { "Yazeed1s/minimal.nvim" },
   { "nyoom-engineering/oxocarbon.nvim" },
+  { "Yazeed1s/oh-lucy.nvim" },
   { "kvrohit/rasmus.nvim" },
   { "sainnhe/sonokai" },
+  { "kvrohit/substrata.nvim" },
   {
     "ramojus/mellifluous.nvim",
     dependecies = {

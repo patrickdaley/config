@@ -5,7 +5,7 @@ return {
       -- icons used by other plugins
       icons = {
         diagnostics = {
-          -- Error = "󱈸",
+          -- Error = "",
           -- Warn = "",
           Error = "󱈸",
           Warn = "󱈸",
@@ -33,7 +33,8 @@ return {
           Event = " ",
           Field = " ",
           File = " ",
-          Folder = " ",
+          -- Folder = " ",
+          Folder = "",
           Function = " ",
           Interface = " ",
           Key = " ",

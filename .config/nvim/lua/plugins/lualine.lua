@@ -17,12 +17,10 @@ return {
     },
     sections = {
       lualine_a = { "mode" },
-      -- lualine_b = { "branch" },
-      lualine_b = {
+      lualine_b = {},
+      lualine_c = {
         { "filename", path = 0, symbols = { modified = "  ", readonly = "", unnamed = "" } },
-        {
-          "diagnostics",
-        },
+        "diagnostics",
       },
       lualine_x = {
         { require("lazy.status").updates, cond = require("lazy.status").has_updates, color = fg("Special") },

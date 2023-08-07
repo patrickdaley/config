@@ -4,7 +4,7 @@
 
 local opt = vim.opt
 
-opt.background = "light"
+opt.background = "dark"
 -- opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25-Cursor,r-cr-o:hor20"
 vim.api.nvim_create_user_command("BuildRun", function()
   local overseer = require("overseer")

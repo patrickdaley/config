@@ -139,6 +139,10 @@ vimconf=$HOME/.config/nvim/lua/
 alias vim="nvim"
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
+if [ -f ~/.zsh/home ]; then
+  source ~/.zsh/home
+fi
+
 if [ -f ~/.zsh/work ]; then
   source ~/.zsh/work
 fi

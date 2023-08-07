@@ -1,6 +1,6 @@
 local wezterm = require("wezterm")
 
--- local font_family = "IBM Plex Mono"
+local font_family = "IBM Plex Mono"
 -- local font_family = "Liberation Mono"
 -- local font_family = "SF Mono"
 -- local font_family = "SF Mono"
@@ -30,14 +30,15 @@ end)
 return {
 	color_scheme = "Twilight",
 
-	line_height = 1.2,
-	font_size = 12,
+	line_height = 1.7,
+	font_size = 13,
 	-- cell_width = 0.9,
 	bold_brightens_ansi_colors = false,
 	tab_bar_at_bottom = true,
 	tab_max_width = 48,
 	use_fancy_tab_bar = false,
 	hide_tab_bar_if_only_one_tab = true,
+	freetype_load_target = "HorizontalLcd",
 	use_resize_increments = true,
 	window_decorations = "RESIZE",
 
@@ -45,17 +46,8 @@ return {
 	-- 	{ family = "SF Mono", weight = "Medium", scale = 1 },
 	-- }),
 	font = wezterm.font_with_fallback({
-		{ family = "SF Mono", weight = "Medium", scale = 1.04 },
+		{ family = font_family, weight = "Medium" },
 	}),
-
-	font_rules = {
-		{
-			intensity = "Bold",
-			font = wezterm.font_with_fallback({
-				{ family = "SF Mono", weight = "Medium", scale = 1.04 },
-			}),
-		},
-	},
 
 	-- freetype_load_target = "Light",
 	-- freetype_render_target = "HorizontalLcd",
@@ -111,14 +103,10 @@ return {
 		{ key = "}", mods = "SHIFT|ALT", action = wezterm.action({ MoveTabRelative = 1 }) },
 	},
 
-	window_padding = {
-		-- top = 0,
-		-- right = 0,
-		-- left = 0,
-		-- bottom = 0,
-		top = ".5cell",
-		right = "1cell",
-		bottom = ".5cell",
-		left = "1cell",
-	},
+	-- window_padding = {
+	-- 	top = 0,
+	-- 	right = 0,
+	-- 	left = 0,
+	-- 	bottom = 0,
+	-- },
 }

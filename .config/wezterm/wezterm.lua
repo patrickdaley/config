@@ -4,7 +4,7 @@ local font_family = "IBM Plex Mono"
 -- local font_family = "Liberation Mono"
 -- local font_family = "SF Mono"
 -- local font_family = "SF Mono"
--- local font_family = "Iosevka SS08"
+local font_family = "Iosevka SS08"
 local scheme = wezterm.color.get_builtin_schemes()["Twilight"]
 
 -- local function basename(s)
@@ -30,8 +30,8 @@ end)
 return {
 	color_scheme = "Twilight",
 
-	line_height = 1.7,
-	font_size = 13,
+	line_height = 1.2,
+	font_size = 14,
 	-- cell_width = 0.9,
 	bold_brightens_ansi_colors = false,
 	tab_bar_at_bottom = true,
@@ -103,10 +103,10 @@ return {
 		{ key = "}", mods = "SHIFT|ALT", action = wezterm.action({ MoveTabRelative = 1 }) },
 	},
 
-	-- window_padding = {
-	-- 	top = 0,
-	-- 	right = 0,
-	-- 	left = 0,
-	-- 	bottom = 0,
-	-- },
+	window_padding = {
+		top = 0,
+		right = 0,
+		left = 0,
+		bottom = 0,
+	},
 }

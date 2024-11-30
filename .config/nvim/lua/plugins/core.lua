@@ -5,10 +5,10 @@ return {
       -- icons used by other plugins
       icons = {
         diagnostics = {
-          Error = "",
-          Warn = "",
-          -- Error = "󱈸",
-          -- Warn = "󱈸",
+          -- Error = "",
+          -- Warn = "",
+          Error = "!",
+          Warn = "?",
           -- Hint = "󱠃",
           Hint = "ℹ",
           Info = "ℹ",

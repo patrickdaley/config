@@ -75,6 +75,8 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
+eval "$(starship init zsh)"
+
 
 # Enable vi mode
 bindkey -v
@@ -82,13 +84,13 @@ bindkey -v
 # 10ms for key sequences (normal mode delay)
 KEYTIMEOUT=1
 
-fpath+=$HOME/.zsh/pure
-autoload -U promptinit; promptinit
-
-PURE_PROMPT_SYMBOL=→
-PURE_PROMPT_VICMD_SYMBOL=·
-
-prompt pure
+# fpath+=$HOME/.zsh/pure
+# autoload -U promptinit; promptinit
+#
+# PURE_PROMPT_SYMBOL=→
+# PURE_PROMPT_VICMD_SYMBOL=·
+#
+# prompt pure
 
 # ZLE hooks for prompt's vi mode status
 # function zle-line-init zle-keymap-select {
@@ -147,3 +149,10 @@ if [ -f ~/.zsh/work ]; then
   source ~/.zsh/work
 fi
 
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+export PATH="$HOME/diglog/bin:$PATH"
+
+export LOCALE_ARCHIVE="$(nix-env --installed --no-name --out-path --query glibc-locales)/lib/locale/locale-archive"

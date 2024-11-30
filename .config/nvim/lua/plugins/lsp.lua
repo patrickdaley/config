@@ -1,50 +1,113 @@
 return {
   "neovim/nvim-lspconfig",
-  ---@class PluginLspOpts
+  -- config = function()
+  --   require("mason-lspconfig").setup({
+  --     ensure_installed = {
+  --       "lua_ls",
+  --       "tsserver",
+  --       "astro",
+  --     },
+  --     handlers = {
+  --       function(ls)
+  --         require("lspconfig")[ls].setup({})
+  --       end,
+  --     },
+  --   })
+  -- end,
   opts = {
-    -- options for vim.diagnostic.config()
     diagnostics = {
-      underline = true,
-      update_in_insert = false,
       virtual_text = false,
-      severity_sort = true,
     },
-    -- Automatically format on save
-    -- autoformat = true,
-    -- options for vim.lsp.buf.format
-    -- `bufnr` and `filter` is handled by the LazyVim formatter,
-    -- but can be also overridden when specified
-    format = {
-      formatting_options = nil,
-      timeout_ms = nil,
+    inlay_hints = {
+      enabled = false,
     },
-    -- LSP Server Settings
-    ---@type lspconfig.options
     servers = {
-      jsonls = {},
-      lua_ls = {
-        -- mason = false, -- set to false if you don't want this server to be installed with mason
-        settings = {
-          Lua = {
-            workspace = {
-              checkThirdParty = false,
-            },
-            completion = {
-              callSnippet = "Replace",
-            },
+      astro = {},
+      -- Ensure mason installs the server
+      clangd = {
+        keys = {
+          { "<leader>cR", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+        },
+        root_dir = function(fname)
+          return require("lspconfig.util").root_pattern(
+            "Makefile",
+            "configure.ac",
+            "configure.in",
+            "config.h.in",
+            "meson.build",
+            "meson_options.txt",
+            "build.ninja"
+          )(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(
+            fname
+          ) or require("lspconfig.util").find_git_ancestor(fname)
+        end,
+        capabilities = {
+          offsetEncoding = { "utf-16" },
+        },
+        cmd = {
+          "clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--header-insertion=iwyu",
+          "--completion-style=detailed",
+          "--function-arg-placeholders",
+          "--fallback-style=llvm",
+        },
+        init_options = {
+          usePlaceholders = true,
+          completeUnimported = true,
+          clangdFileStatus = true,
+        },
+      },
+      jdtls = {},
+      sqls = {},
+      shopify_theme_ls = {},
+      taplo = {
+        keys = {
+          {
+            "K",
+            function()
+              if vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
+                require("crates").show_popup()
+              else
+                vim.lsp.buf.hover()
+              end
+            end,
+            desc = "Show Crate Documentation",
           },
         },
       },
-      pyright = {
-        settings = {
-          analysis = {
-            typeCheckingMode = "off",
-          },
-        },
-      },
+      -- sqlls = {
+      --   root_dir = function(_)
+      --     return vim.loop.cwd()
+      --   end,
+      --   settings = {
+      --     connections = {
+      --       {
+      --         name = "chinook",
+      --         database = "chinook",
+      --         adapter = "postgres",
+      --         user = "patrick",
+      --         password = "ghs0td0ggy",
+      --         projectPaths = { "/home/patrick/Study/psql-art/app/" }
+      --       }
+      --     }
+      --   }
+      -- }
+      rust_analyzer = { enabled = false },
     },
-    -- you can do any additional lsp server setup here
-    -- return true if you don't want this server to be setup with lspconfig
-    ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
+    setup = {
+      clangd = function(_, opts)
+        local clangd_ext_opts = require("lazyvim.util").opts("clangd_extensions.nvim")
+        require("clangd_extensions").setup(vim.tbl_deep_extend("force", clangd_ext_opts or {}, { server = opts }))
+        return false
+      end,
+      hls = function()
+        return true
+      end,
+      jdtls = function()
+        return true
+      end,
+    },
   },
 }

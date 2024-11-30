@@ -10,14 +10,14 @@ return {
     },
   },
   opts = {
-    timeout = 3000,
-    max_height = function()
-      return math.floor(vim.o.lines * 0.4)
-    end,
-    max_width = function()
-      return math.floor(vim.o.columns * 0.75)
-    end,
-    render = "minimal",
+    timeout = 5000,
+    -- max_height = function()
+    --   return math.floor(vim.o.lines * 0.4)
+    -- end,
+    -- max_width = function()
+    --   return math.floor(vim.o.columns * 0.75)
+    -- end,
+    -- render = "minimal",
     top_down = false,
   },
   init = function()

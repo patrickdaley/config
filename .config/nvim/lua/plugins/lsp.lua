@@ -59,6 +59,13 @@ return {
           clangdFileStatus = true,
         },
       },
+      gopls = {
+        settings = {
+          gopls = {
+            usePlaceholders = false,
+          },
+        },
+      },
       jdtls = {},
       sqls = {},
       shopify_theme_ls = {},

@@ -5,6 +5,7 @@
     "lazyvim.plugins.extras.formatting.prettier",
     "lazyvim.plugins.extras.lang.clangd",
     "lazyvim.plugins.extras.lang.cmake",
+    "lazyvim.plugins.extras.lang.go",
     "lazyvim.plugins.extras.lang.haskell",
     "lazyvim.plugins.extras.lang.java",
     "lazyvim.plugins.extras.lang.json",
@@ -18,7 +19,7 @@
     "lazyvim.plugins.extras.util.mini-hipatterns"
   ],
   "news": {
-    "NEWS.md": "7107"
+    "NEWS.md": "10960"
   },
   "version": 7
 }

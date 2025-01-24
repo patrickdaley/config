@@ -156,3 +156,6 @@ eval "$(pyenv init -)"
 export PATH="$HOME/diglog/bin:$PATH"
 
 export LOCALE_ARCHIVE="$(nix-env --installed --no-name --out-path --query glibc-locales)/lib/locale/locale-archive"
+
+export PATH="/usr/local/go/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
